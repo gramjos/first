@@ -1,0 +1,2 @@
+- cloudfare pages with custom DNS (www.grahamjoss.org)
+- vanilla js ethos with minor exceptions (leaflet and marimo)
