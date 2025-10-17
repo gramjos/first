@@ -22,7 +22,7 @@ def _(g):
     import polars as pl
     import marimo as mo
 
-    path_to_csv = mo.notebook_location() / "public" / "bnsf_rail.geojson"
+    path_to_csv = mo.notebook_location() / "public" / "bnsf_rail_il.geojson"
     df = g.read_file(str(path_to_csv))
     return (df,)
 
