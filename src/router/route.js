@@ -29,17 +29,51 @@ export class Route {
 
     const keys = [];
     
-    // Escape special regex characters except for our placeholders
-    let regexPath = path
-      .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-      .replace(/\*/g, '.*');
-
-    // Replace :param and :param? with capture groups
-    regexPath = regexPath.replace(/:(\w+)(\?)?/g, (match, key, optional) => {
-      keys.push({ name: key, optional: !!optional });
-      this.params.push(key);
-      return optional ? '(?:/([^/]+))?' : '/([^/]+)';
-    });
+    // Build regex by parsing the path character by character
+    let regexPath = '';
+    let i = 0;
+    
+    while (i < path.length) {
+      if (path[i] === ':') {
+        // Found a parameter
+        i++; // Skip the :
+        let paramName = '';
+        while (i < path.length && /\w/.test(path[i])) {
+          paramName += path[i];
+          i++;
+        }
+        
+        // Check if optional
+        const isOptional = i < path.length && path[i] === '?';
+        if (isOptional) i++; // Skip the ?
+        
+        keys.push({ name: paramName, optional: isOptional });
+        this.params.push(paramName);
+        
+        if (isOptional) {
+          // For optional params, the / before it should also be optional
+          // Remove the trailing / from regexPath if present
+          if (regexPath.endsWith('/')) {
+            regexPath = regexPath.slice(0, -1);
+          }
+          regexPath += '(?:/([^/]+))?';
+        } else {
+          regexPath += '([^/]+)';
+        }
+      } else if (path[i] === '*') {
+        regexPath += '.*';
+        i++;
+      } else {
+        // Regular character - escape if needed
+        const char = path[i];
+        if ('.+^${}()|[]\\'.includes(char)) {
+          regexPath += '\\' + char;
+        } else {
+          regexPath += char;
+        }
+        i++;
+      }
+    }
 
     // Ensure exact match
     regexPath = '^' + regexPath + '$';
