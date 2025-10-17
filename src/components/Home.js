@@ -33,11 +33,11 @@ export default function Home({ params, query, state }) {
         <h2>Try Navigation:</h2>
         <nav>
           <a href="/about">About</a>
+          <a href="/notebook">Interactive Notebook</a>
           <a href="/products">Products</a>
           <a href="/products/123">Product Detail</a>
           <a href="/user/42/posts/100">User Post</a>
           <a href="/contact">Contact</a>
-          <a href="/notebooks/output_dir/index.html" target="_blank">Notebooks (External)</a>
         </nav>
       </div>
     </div>

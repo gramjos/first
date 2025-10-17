@@ -4,6 +4,10 @@
 import { createRouter } from './router/core.js';
 import { routes } from './routes.js';
 import { ready } from './utils/dom.js';
+import { initNotebookPanel } from './components/Notebook.js';
+
+// Store cleanup function for notebook panel
+let notebookCleanup = null;
 
 // Middleware example: Logging
 const loggingMiddleware = async (context, next) => {
@@ -20,6 +24,28 @@ const titleMiddleware = async (context, next) => {
   }
 };
 
+// Middleware: Initialize component-specific functionality
+const componentInitMiddleware = async (context, next) => {
+  await next();
+  
+  // Initialize notebook panel if on notebook route
+  if (context.to.path === '/notebook') {
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      if (notebookCleanup) {
+        notebookCleanup();
+      }
+      notebookCleanup = initNotebookPanel();
+    }, 10);
+  } else {
+    // Cleanup notebook panel when leaving notebook route
+    if (notebookCleanup) {
+      notebookCleanup();
+      notebookCleanup = null;
+    }
+  }
+};
+
 // Initialize router when DOM is ready
 ready(() => {
   // Create router instance
@@ -32,6 +58,7 @@ ready(() => {
   // Add middleware
   router.use(loggingMiddleware);
   router.use(titleMiddleware);
+  router.use(componentInitMiddleware);
 
   // Register routes
   routes.forEach(route => {

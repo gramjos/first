@@ -2,6 +2,8 @@
 
 A modern, lightweight, zero-dependency routing system for single-page applications built entirely in vanilla JavaScript.
 
+**Hosted at**: [grahamjoss.org](https://grahamjoss.org) (Cloudflare Pages)
+
 ## ✨ Features
 
 - 🚀 **No Hash Routing** - Clean URLs using HTML5 History API (`/products/123` not `/#/products/123`)
@@ -12,6 +14,15 @@ A modern, lightweight, zero-dependency routing system for single-page applicatio
 - 🔧 **Full Featured** - Route parameters, query strings, wildcards, nested routes
 - 🎨 **Active Links** - Automatic CSS class management for navigation
 - 📱 **Responsive** - Works on all modern browsers
+- 📓 **Notebook Integration** - Marimo interactive notebooks with resizable side panel
+
+## 🎯 Live Routes
+
+- `/` - Home page with feature overview
+- `/about` - About page
+- `/notebook` - Interactive Marimo notebook with resizable side panel ⭐
+- `/products` - Products listing
+- `/contact` - Contact form
 
 ## 🚀 Quick Start
 
@@ -159,13 +170,44 @@ See the live demo at the root of this project. The demo includes:
 
 ## 📝 Notes
 
-- cloudfare pages with custom DNS (grahamjoss.org)
-- vanilla js ethos with minor exceptions (leaflet and marimo)
-- data slice b/c cloudflare 25 MiB limit
-- marimo notebook creation `uvx marimo edit notebook1.py`
-- notebook conversion `marimo export html-wasm notebook1.py -o output_dir --mode edit --include-cloudflare`
+- Cloudflare Pages with custom DNS (grahamjoss.org)
+- Vanilla JS ethos with minor exceptions (Leaflet for maps, Marimo for notebooks)
+- Data slice due to Cloudflare 25 MiB limit
+
+## 📓 Marimo Notebook Integration
+
+### Notebook Workflow
+1. **Create notebook**: 
+   ```bash
+   uvx marimo edit notebook1.py
+   ```
+
+2. **Export for web**: 
+   ```bash
+   marimo export html-wasm notebook1.py -o output_dir --mode edit --include-cloudflare
+   ```
+
+3. **Access in app**: Navigate to `/notebook` route
+
+### Data Processing Example
+Slice GeoJSON data for size limits:
+```bash
+python -c '
+import geopandas as g;
+folder = "/Users/gramjos/Computation/cloud-pages/first/notebooks/public/";
+d=g.read_file(folder+"bnsf_rail_il.geojson");
+il_s=d[d["STATEAB"]=="IL"];
+il_s.to_file(folder+"bnsf_rail_il.geojson",driver="GeoJSON");
+'
+```
+
+### Side Panel Features
+- **Toggle button** to open/close notebook
+- **Resizable panel** - drag the left edge to adjust width
+- **Header bar** with title and close button
+- **Smooth animations** for professional UX
+- **Proper cleanup** on route navigation
 
 ## 📄 License
 
 MIT License - Free to use in any project.
-

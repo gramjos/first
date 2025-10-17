@@ -7,7 +7,11 @@ import Products from './components/Products.js';
 import ProductDetail from './components/ProductDetail.js';
 import UserPost from './components/UserPost.js';
 import Contact from './components/Contact.js';
+import Notebook, { initNotebookPanel } from './components/Notebook.js';
 import NotFound from './components/NotFound.js';
+
+// Store cleanup function for notebook panel
+let notebookCleanup = null;
 
 export const routes = [
   {
@@ -24,6 +28,22 @@ export const routes = [
     name: 'about',
     meta: {
       title: 'About - Vanilla JS Router'
+    }
+  },
+  {
+    path: '/notebook',
+    component: Notebook,
+    name: 'notebook',
+    meta: {
+      title: 'Notebook - Marimo Interactive'
+    },
+    beforeEnter: (to, from, next) => {
+      // Cleanup previous notebook panel if exists
+      if (notebookCleanup) {
+        notebookCleanup();
+        notebookCleanup = null;
+      }
+      next();
     }
   },
   {
