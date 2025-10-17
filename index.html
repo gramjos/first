@@ -1,54 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="refresh" content="0; url=/src/index.html">
-	<title>Redirecting...</title>
-	<style>
-		body {
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-			margin: 0;
-			background: #f5f5f5;
-		}
-		.redirect-message {
-			text-align: center;
-			padding: 2rem;
-			background: white;
-			border-radius: 8px;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-		}
-		.spinner {
-			border: 3px solid #f3f3f3;
-			border-top: 3px solid #4CAF50;
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			animation: spin 1s linear infinite;
-			margin: 20px auto;
-		}
-		@keyframes spin {
-			0% { transform: rotate(0deg); }
-			100% { transform: rotate(360deg); }
-		}
-	</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple SPA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    nav {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    nav a:hover {
+      background: #f0f0f0;
+    }
+
+    nav a.active {
+      background: #4CAF50;
+      color: white;
+    }
+
+    main {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      min-height: 400px;
+    }
+
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
-	<div class="redirect-message">
-		<h1>Redirecting to the new site...</h1>
-		<div class="spinner"></div>
-		<p>If you are not redirected automatically, <a href="/src/index.html">click here</a>.</p>
-	</div>
-	<script>
-		// Fallback redirect if meta refresh doesn't work
-		setTimeout(() => {
-			window.location.href = '/src/index.html';
-		}, 100);
-	</script>
+  <div class="container">
+    <nav>
+      <a href="/" data-link>Home</a>
+      <a href="/about" data-link>About</a>
+    </nav>
+
+    <main id="app">
+      <!-- Content will be rendered here -->
+    </main>
+
+    <footer>
+      <p>Simple 2-Page SPA with Deep Linking</p>
+    </footer>
+  </div>
+
+  <script>
+    // Router class
+    class Router {
+      constructor(routes) {
+        this.routes = routes;
+        this.currentPath = null;
+
+        // Handle initial page load
+        this.navigate(window.location.pathname, false);
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+          this.navigate(window.location.pathname, false);
+        });
+
+        // Handle link clicks
+        document.addEventListener('click', (e) => {
+          if (e.target.matches('[data-link]')) {
+            e.preventDefault();
+            this.navigate(e.target.getAttribute('href'));
+          }
+        });
+      }
+
+      navigate(path, pushState = true) {
+        // Update browser history
+        if (pushState) {
+          history.pushState(null, null, path);
+        }
+
+        // Find matching route
+        const route = this.routes.find(r => r.path === path) || this.routes.find(r => r.path === '*');
+
+        // Render the page
+        if (route) {
+          document.getElementById('app').innerHTML = route.render();
+          document.title = route.title;
+          this.currentPath = path;
+          this.updateActiveLink(path);
+        }
+      }
+
+      updateActiveLink(path) {
+        document.querySelectorAll('nav a').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === path) {
+            link.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // Define routes
+    const routes = [
+      {
+        path: '/',
+        title: 'Home - Simple SPA',
+        render: () => `
+          <h1>Welcome Home</h1>
+          <p>This is a simple 2-page Single Page Application.</p>
+          <p>Features:</p>
+          <ul>
+            <li>✅ Client-side routing</li>
+            <li>✅ Deep linking support</li>
+            <li>✅ Works on Cloudflare Pages</li>
+            <li>✅ No build tools required</li>
+          </ul>
+          <p><a href="/about" data-link>Learn more about this app →</a></p>
+        `
+      },
+      {
+        path: '/about',
+        title: 'About - Simple SPA',
+        render: () => `
+          <h1>About This App</h1>
+          <p>This is a minimal Single Page Application built with vanilla JavaScript.</p>
+          <p>It demonstrates:</p>
+          <ul>
+            <li><strong>Client-side routing:</strong> Navigation without page reloads</li>
+            <li><strong>Deep linking:</strong> You can bookmark or share any URL</li>
+            <li><strong>History API:</strong> Browser back/forward buttons work correctly</li>
+          </ul>
+          <h2>How Deep Linking Works on Cloudflare</h2>
+          <p>Deep linking is enabled through a <code>_redirects</code> file that tells Cloudflare to serve <code>index.html</code> for all routes. The JavaScript router then handles the actual routing on the client side.</p>
+          <p><a href="/" data-link>← Back to Home</a></p>
+        `
+      },
+      {
+        path: '*',
+        title: '404 - Page Not Found',
+        render: () => `
+          <h1>404 - Page Not Found</h1>
+          <p>The page you're looking for doesn't exist.</p>
+          <p><a href="/" data-link>← Back to Home</a></p>
+        `
+      }
+    ];
+
+    // Initialize router
+    new Router(routes);
+  </script>
 </body>
 </html>
 

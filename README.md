@@ -1,213 +1,111 @@
-# Vanilla JavaScript SPA Router
+# Simple 2-Page SPA
 
-A modern, lightweight, zero-dependency routing system for single-page applications built entirely in vanilla JavaScript.
+A minimal Single Page Application with deep linking support for Cloudflare Pages.
 
-**Hosted at**: [grahamjoss.org](https://grahamjoss.org) (Cloudflare Pages)
+## Features
 
-## ✨ Features
+- ✅ 2 pages (Home and About)
+- ✅ Client-side routing
+- ✅ Deep linking support (you can directly navigate to any URL)
+- ✅ Browser back/forward buttons work
+- ✅ No build tools or dependencies required
+- ✅ Optimized for Cloudflare Pages hosting
 
-- 🚀 **No Hash Routing** - Clean URLs using HTML5 History API (`/products/123` not `/#/products/123`)
-- 🔗 **Deep Linking** - Full support for bookmarkable and shareable URLs
-- ⚡ **Zero Dependencies** - Pure vanilla JavaScript, no frameworks required
-- 🎯 **Extensible** - Middleware, guards, and hooks for complete control
-- 📦 **Lightweight** - Small footprint, fast performance
-- 🔧 **Full Featured** - Route parameters, query strings, wildcards, nested routes
-- 🎨 **Active Links** - Automatic CSS class management for navigation
-- 📱 **Responsive** - Works on all modern browsers
-- 📓 **Notebook Integration** - Marimo interactive notebooks with resizable side panel
+## How It Works
 
-## 🎯 Live Routes
+### Client-Side Routing
 
-- `/` - Home page with feature overview
-- `/about` - About page
-- `/notebook` - Interactive Marimo notebook with resizable side panel ⭐
-- `/products` - Products listing
-- `/contact` - Contact form
+The app uses the browser's History API to manage navigation without page reloads:
 
-## 🚀 Quick Start
+- Clicking navigation links updates the URL and renders the appropriate page
+- The `popstate` event handles browser back/forward buttons
+- The router matches the current path to a route definition and renders the corresponding content
 
-```javascript
-import { createRouter } from './router/core.js';
+### Deep Linking on Cloudflare
 
-// Create router
-const router = createRouter({ el: '#app' });
+Deep linking is enabled through the `_redirects` file:
 
-// Define routes
-router.add('/', HomeComponent);
-router.add('/about', AboutComponent);
-router.add('/products/:id', ProductDetailComponent);
-router.add('*', NotFoundComponent);
-
-// Start router
-router.start();
+```
+/*    /index.html    200
 ```
 
-## 📖 Documentation
+This tells Cloudflare Pages to serve `index.html` for all routes (e.g., `/about`). Once `index.html` loads, the JavaScript router reads the current URL path and renders the appropriate page.
 
-- [API Documentation](docs/API.md) - Complete API reference
-- [Server Configuration](#server-configuration) - Setup instructions
-- [Examples](#examples) - Usage examples
+## File Structure
 
-## 🎯 Core Concepts
-
-### Route Patterns
-
-```javascript
-// Static routes
-router.add('/about', AboutComponent);
-
-// Dynamic parameters
-router.add('/user/:id', UserComponent);
-
-// Optional parameters
-router.add('/user/:id/posts/:postId?', PostComponent);
-
-// Wildcard (404)
-router.add('*', NotFoundComponent);
+```
+.
+├── index.html       # Main HTML file with embedded router
+├── _redirects       # Cloudflare Pages redirects config
+└── README.md        # This file
 ```
 
-### Navigation
-
-```javascript
-// Programmatic navigation
-router.navigate('/products/123');
-router.navigate('/products', { query: { category: 'electronics' } });
-router.back();
-router.forward();
-
-// Declarative (automatic)
-<a href="/products">Products</a>
-```
-
-### Guards & Middleware
-
-```javascript
-// Global guard
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated()) {
-    next('/login');
-  } else {
-    next();
-  }
-});
-
-// Middleware
-router.use(async (context, next) => {
-  console.log('Navigating to:', context.to.path);
-  await next();
-});
-```
-
-## 🔧 Server Configuration
-
-### Apache (.htaccess)
-
-```apache
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ /src/index.html [L]
-</IfModule>
-```
-
-### Nginx
-
-```nginx
-location / {
-  try_files $uri $uri/ /index.html;
-}
-```
+## Deployment
 
 ### Cloudflare Pages
 
-See [notebooks/index.js](notebooks/index.js) for Cloudflare Workers integration.
+1. Push your code to a Git repository (GitHub, GitLab, etc.)
+2. Go to [Cloudflare Pages](https://pages.cloudflare.com/)
+3. Create a new project and connect your repository
+4. Use these build settings:
+   - **Build command:** (leave empty)
+   - **Build output directory:** `/`
+5. Deploy!
 
-## 📂 Project Structure
+The `_redirects` file will automatically be picked up by Cloudflare Pages.
 
-```
-/src
-  /router
-    - core.js         # Main router class
-    - route.js        # Route definition class
-    - history.js      # History API wrapper
-    - matcher.js      # URL pattern matching
-    - middleware.js   # Middleware pipeline
-  /components
-    - loader.js       # Dynamic component loader
-    - *.js           # Component files
-  /utils
-    - dom.js          # DOM manipulation helpers
-  app.js             # Application entry point
-  routes.js          # Route definitions
-  index.html         # Main HTML file
-  styles.css         # Styles
-docs/
-  - API.md           # API documentation
-.htaccess           # Apache configuration
-```
+## Local Development
 
-## 🎨 Examples
+Simply open `index.html` in a browser, or use a local server:
 
-See the live demo at the root of this project. The demo includes:
-
-- Static routes (Home, About)
-- Dynamic routes (Products with ID)
-- Nested parameters (User posts)
-- Query parameters
-- 404 handling
-- Navigation guards
-- Active link styling
-
-## 🌐 Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- IE 10+ (with History API polyfill)
-
-## 📝 Notes
-
-- Cloudflare Pages with custom DNS (grahamjoss.org)
-- Vanilla JS ethos with minor exceptions (Leaflet for maps, Marimo for notebooks)
-- Data slice due to Cloudflare 25 MiB limit
-
-## 📓 Marimo Notebook Integration
-
-### Notebook Workflow
-1. **Create notebook**: 
-   ```bash
-   uvx marimo edit notebook1.py
-   ```
-
-2. **Export for web**: 
-   ```bash
-   marimo export html-wasm notebook1.py -o output_dir --mode edit --include-cloudflare
-   ```
-
-3. **Access in app**: Navigate to `/notebook` route
-
-### Data Processing Example
-Slice GeoJSON data for size limits:
 ```bash
-python -c '
-import geopandas as g;
-folder = "/Users/gramjos/Computation/cloud-pages/first/notebooks/public/";
-d=g.read_file(folder+"bnsf_rail_il.geojson");
-il_s=d[d["STATEAB"]=="IL"];
-il_s.to_file(folder+"bnsf_rail_il.geojson",driver="GeoJSON");
-'
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+
+# Node.js (if you have npx)
+npx serve
+
+# PHP
+php -S localhost:8000
 ```
 
-### Side Panel Features
-- **Toggle button** to open/close notebook
-- **Resizable panel** - drag the left edge to adjust width
-- **Header bar** with title and close button
-- **Smooth animations** for professional UX
-- **Proper cleanup** on route navigation
+Then visit `http://localhost:8000`
 
-## 📄 License
+## Testing Deep Links
 
-MIT License - Free to use in any project.
+After deployment, you can test deep linking by:
+
+1. Navigating to your app (e.g., `https://your-app.pages.dev/`)
+2. Clicking to the About page
+3. Copying the URL (`https://your-app.pages.dev/about`)
+4. Opening that URL in a new browser tab
+
+The About page should load directly without redirecting to the home page first.
+
+## Extending the App
+
+To add more pages:
+
+1. Add a new route object to the `routes` array in `index.html`
+2. Add a navigation link in the `<nav>` section
+3. That's it!
+
+Example:
+
+```javascript
+{
+  path: '/contact',
+  title: 'Contact - Simple SPA',
+  render: () => \`
+    <h1>Contact Us</h1>
+    <p>Get in touch!</p>
+  \`
+}
+```
+
+```html
+<a href="/contact" data-link>Contact</a>
+```
