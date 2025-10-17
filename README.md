@@ -10,6 +10,7 @@ A minimal Single Page Application with deep linking support for Cloudflare Pages
 - ✅ Browser back/forward buttons work
 - ✅ No build tools or dependencies required
 - ✅ Optimized for Cloudflare Pages hosting
+- ✅ Clean separation of concerns (HTML, CSS, JavaScript)
 
 ## How It Works
 
@@ -35,10 +36,23 @@ This tells Cloudflare Pages to serve `index.html` for all routes (e.g., `/about`
 
 ```
 .
-├── index.html       # Main HTML file with embedded router
+├── index.html       # HTML structure and layout
+├── styles.css       # All CSS styling
+├── router.js        # Router class and navigation logic
+├── routes.js        # Route definitions and page content
+├── app.js           # Application initialization
 ├── _redirects       # Cloudflare Pages redirects config
 └── README.md        # This file
 ```
+
+### Language Separation
+
+- **HTML** (`index.html`) - Document structure, semantic markup
+- **CSS** (`styles.css`) - All styling, layout, and responsive design
+- **JavaScript** - Separated into logical modules:
+  - `router.js` - Core routing functionality
+  - `routes.js` - Route configuration and page templates
+  - `app.js` - Application entry point and initialization
 
 ## Deployment
 
