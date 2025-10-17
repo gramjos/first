@@ -19,8 +19,9 @@ def _():
 
 @app.cell
 def _(g):
-    d=g.read_file("/Users/gramjos/Computation/cloud-pages/first/notebooks/public/bnsf_rail.geojson")
-    return (d,)
+    folder = "/Users/gramjos/Computation/cloud-pages/first/notebooks/public/"
+    d=g.read_file(folder+'bnsf_rail_il.geojson')
+    return d, folder
 
 
 @app.cell
@@ -38,6 +39,13 @@ def _(d):
 @app.cell
 def _(il_s):
     il_s
+    return
+
+
+@app.cell
+def _(folder, il_s):
+    # save to file
+    il_s.to_file(folder+"bnsf_rail_il.geojson",driver='GeoJSON')
     return
 
 
