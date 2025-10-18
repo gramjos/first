@@ -1,10 +1,12 @@
-# Simple 2-Page SPA
+# Data-Driven SPA
 
-A minimal Single Page Application with deep linking support for Cloudflare Pages.
+A minimal Single Page Application with **JSON-based page definitions** and deep linking support for Cloudflare Pages.
 
-## Features
+## ✨ Features
 
-- ✅ 2 pages (Home and About)
+- ✅ **Data-driven architecture** - Pages defined in pure JSON
+- ✅ **Main pages & Sub-pages** - Hierarchical page structure
+- ✅ **Zero coding required** - Add pages by editing JSON
 - ✅ Client-side routing
 - ✅ Deep linking support (you can directly navigate to any URL)
 - ✅ Browser back/forward buttons work
@@ -12,7 +14,79 @@ A minimal Single Page Application with deep linking support for Cloudflare Pages
 - ✅ Optimized for Cloudflare Pages hosting
 - ✅ Clean separation of concerns (HTML, CSS, JavaScript)
 
+## 🚀 Adding New Pages
+
+**It's as simple as adding a JSON object!**
+
+### Add a Main Page
+
+Edit `pages.json` and add to the `pages` array:
+
+```json
+{
+  "id": "contact",
+  "type": "main",
+  "path": "/contact",
+  "title": "Contact",
+  "pageTitle": "Contact - Simple SPA",
+  "icon": "📧",
+  "content": {
+    "heading": "Contact Us",
+    "sections": [
+      {
+        "type": "paragraph",
+        "text": "Get in touch with us!"
+      }
+    ]
+  }
+}
+```
+
+### Add a Sub-Page
+
+Add to the `subPages` array of any main page:
+
+```json
+{
+  "id": "about-team",
+  "path": "/about/team",
+  "title": "Team",
+  "pageTitle": "Our Team - Simple SPA",
+  "content": {
+    "heading": "Our Team",
+    "sections": [
+      {
+        "type": "paragraph",
+        "text": "Meet our amazing team!"
+      }
+    ]
+  }
+}
+```
+
+**That's it!** Refresh your browser and the new page appears. No coding, no build step.
+
+📖 **[See ADDING_PAGES.md for complete guide →](./ADDING_PAGES.md)**
+
 ## How It Works
+
+### Data-Driven Architecture
+
+1. **Define Pages** - Edit `pages.json` to add/modify pages
+2. **Load Data** - App fetches JSON on initialization
+3. **Build Routes** - Router maps all paths (main + sub-pages)
+4. **Render Content** - Renderer converts JSON sections to HTML
+5. **Navigate** - History API handles client-side routing
+
+### Content Sections
+
+Pages support multiple section types:
+
+- **Paragraph** - Text content with optional HTML
+- **Heading** - H1-H6 headings
+- **List** - Bullet lists with HTML support
+- **Code** - Syntax-highlighted code blocks
+- **HTML** - Raw HTML for custom content
 
 ### Client-Side Routing
 
@@ -20,7 +94,7 @@ The app uses the browser's History API to manage navigation without page reloads
 
 - Clicking navigation links updates the URL and renders the appropriate page
 - The `popstate` event handles browser back/forward buttons
-- The router matches the current path to a route definition and renders the corresponding content
+- The router matches the current path to a page definition and renders content
 
 ### Deep Linking on Cloudflare
 
@@ -38,21 +112,36 @@ This tells Cloudflare Pages to serve `index.html` for all routes (e.g., `/about`
 .
 ├── index.html       # HTML structure and layout
 ├── styles.css       # All CSS styling
+├── renderer.js      # Page content renderer
 ├── router.js        # Router class and navigation logic
-├── routes.js        # Route definitions and page content
 ├── app.js           # Application initialization
+├── pages.json       # 📄 PAGE DEFINITIONS (edit this to add pages!)
 ├── _redirects       # Cloudflare Pages redirects config
-└── README.md        # This file
+├── README.md        # This file
+└── ADDING_PAGES.md  # Complete guide to adding pages
 ```
 
-### Language Separation
+### Architecture
 
-- **HTML** (`index.html`) - Document structure, semantic markup
-- **CSS** (`styles.css`) - All styling, layout, and responsive design
-- **JavaScript** - Separated into logical modules:
-  - `router.js` - Core routing functionality
-  - `routes.js` - Route configuration and page templates
-  - `app.js` - Application entry point and initialization
+- **Data Layer** (`pages.json`) - All page content and structure
+- **Rendering Layer** (`renderer.js`) - Converts JSON to HTML
+- **Routing Layer** (`router.js`) - Handles navigation and history
+- **Presentation Layer** (`styles.css`) - All styling
+- **Initialization** (`app.js`) - Loads data and starts app
+
+## 🎯 Page Types
+
+### 1. Main Pages
+- Appear in top navigation
+- Defined with `"type": "main"`
+- Can have multiple sub-pages
+- Example: Home, About, Services
+
+### 2. Sub-Pages
+- Nested under main pages
+- Added to `subPages` array
+- Full deep-linking support
+- Example: /about/team, /about/technology
 
 ## Deployment
 
@@ -101,25 +190,57 @@ The About page should load directly without redirecting to the home page first.
 
 ## Extending the App
 
-To add more pages:
+### Adding a New Page
 
-1. Add a new route object to the `routes` array in `index.html`
-2. Add a navigation link in the `<nav>` section
-3. That's it!
+Just edit `pages.json`:
 
-Example:
-
-```javascript
+```json
 {
-  path: '/contact',
-  title: 'Contact - Simple SPA',
-  render: () => \`
-    <h1>Contact Us</h1>
-    <p>Get in touch!</p>
-  \`
+  "pages": [
+    // ... existing pages ...
+    {
+      "id": "new-page",
+      "type": "main",
+      "path": "/new-page",
+      "title": "New Page",
+      "pageTitle": "New Page - Simple SPA",
+      "icon": "✨",
+      "content": {
+        "heading": "My New Page",
+        "sections": [
+          {
+            "type": "paragraph",
+            "text": "Content goes here!"
+          }
+        ]
+      }
+    }
+  ]
 }
 ```
 
-```html
-<a href="/contact" data-link>Contact</a>
+Save and refresh - done! ✨
+
+### Adding Sub-Pages
+
+Add to the `subPages` array of any main page:
+
+```json
+{
+  "id": "about",
+  "type": "main",
+  "path": "/about",
+  "title": "About",
+  "subPages": [
+    {
+      "id": "about-new-subpage",
+      "path": "/about/new-subpage",
+      "title": "New Sub-Page",
+      "pageTitle": "New Sub-Page - Simple SPA",
+      "content": { ... }
+    }
+  ]
+}
 ```
+
+**See [ADDING_PAGES.md](./ADDING_PAGES.md) for complete documentation.**
