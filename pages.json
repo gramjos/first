@@ -37,13 +37,14 @@
           }
         ]
       }
-    },    {
+    },    
+    {
       "id": "gj",
       "type": "main",
       "path": "/gj",
       "title": "GramJos",
       "pageTitle": "Welcome GramJos",
-      "icon": "🏠",
+      "icon": "💕",
       "content": {
         "heading": "Get me HIRED",
         "sections": [
