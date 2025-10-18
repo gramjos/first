@@ -46,28 +46,32 @@
       "pageTitle": "Welcome GramJos",
       "icon": "💕",
       "content": {
-        "heading": "Get me HIRED",
+        "heading": "Welcome Homie",
         "sections": [
           {
             "type": "paragraph",
-            "text": "Somewant to trade money for my skills"
+            "text": "gjj"
           },
           {
             "type": "heading",
             "level": 2,
-            "text": "My Features:"
+            "text": "Features:"
           },
           {
             "type": "list",
             "items": [
-              "Talking",
-              "doing",
-              "supporting"
+              "✅ Client-side routing",
+              "✅ Deep linking support",
+              "✅ Works on Cloudflare Pages",
+              "✅ No build tools required",
+              "✅ Data-driven page architecture",
+              "✅ JSON-based page definitions",
+              "✅ Support for main pages and sub-pages"
             ]
           },
           {
             "type": "paragraph",
-            "html": "<a href=\"/gj\" data-link>Learn more about this GJ →</a>"
+            "html": "<a href=\"/gj\" data-link>Learn more about this app →</a>"
           }
         ]
       }
