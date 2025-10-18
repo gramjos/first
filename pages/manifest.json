@@ -1,0 +1,9 @@
+{
+  "pages": [
+    "home.md",
+    "gj.md",
+    "about.md",
+    "about/team.md",
+    "about/technology.md"
+  ]
+}

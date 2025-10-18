@@ -1,0 +1,220 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "type": "main",
+      "path": "/",
+      "title": "Home",
+      "pageTitle": "Home - Simple SPA",
+      "icon": "🏠",
+      "content": {
+        "heading": "Welcome Home",
+        "sections": [
+          {
+            "type": "paragraph",
+            "text": "This is a simple 2-page Single Page Application with a data-driven architecture."
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Features:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "✅ Client-side routing",
+              "✅ Deep linking support",
+              "✅ Works on Cloudflare Pages",
+              "✅ No build tools required",
+              "✅ Data-driven page architecture",
+              "✅ JSON-based page definitions",
+              "✅ Support for main pages and sub-pages"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "html": "<a href=\"/about\" data-link>Learn more about this app →</a>"
+          }
+        ]
+      }
+    },    
+    {
+      "id": "gj",
+      "type": "main",
+      "path": "/gj",
+      "title": "GramJos",
+      "pageTitle": "Welcome GramJos",
+      "icon": "💕",
+      "content": {
+        "heading": "Welcome Homie",
+        "sections": [
+          {
+            "type": "paragraph",
+            "text": "gjj"
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Features:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "✅ Client-side routing",
+              "✅ Deep linking support",
+              "✅ Works on Cloudflare Pages",
+              "✅ No build tools required",
+              "✅ Data-driven page architecture",
+              "✅ JSON-based page definitions",
+              "✅ Support for main pages and sub-pages"
+            ]
+          },
+          {
+            "type": "paragraph",
+            "html": "<a href=\"/gj\" data-link>Learn more about this app →</a>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "about",
+      "type": "main",
+      "path": "/about",
+      "title": "About",
+      "pageTitle": "About - Simple SPA",
+      "icon": "ℹ️",
+      "content": {
+        "heading": "About This App",
+        "sections": [
+          {
+            "type": "paragraph",
+            "text": "This is a minimal Single Page Application built with vanilla JavaScript and a data-driven architecture."
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Key Features"
+          },
+          {
+            "type": "list",
+            "items": [
+              "<strong>Client-side routing:</strong> Navigation without page reloads",
+              "<strong>Deep linking:</strong> You can bookmark or share any URL",
+              "<strong>History API:</strong> Browser back/forward buttons work correctly",
+              "<strong>JSON-driven:</strong> Pages defined in simple JSON format",
+              "<strong>Sub-pages:</strong> Support for nested page hierarchies"
+            ]
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "How to Add New Pages"
+          },
+          {
+            "type": "paragraph",
+            "html": "Simply add a new object to <code>pages.json</code> with the required properties:"
+          },
+          {
+            "type": "code",
+            "language": "json",
+            "code": "{\n  \"id\": \"contact\",\n  \"type\": \"main\",\n  \"path\": \"/contact\",\n  \"title\": \"Contact\",\n  \"pageTitle\": \"Contact - Simple SPA\",\n  \"icon\": \"📧\",\n  \"content\": {\n    \"heading\": \"Contact Us\",\n    \"sections\": [\n      {\n        \"type\": \"paragraph\",\n        \"text\": \"Get in touch with us!\"\n      }\n    ]\n  }\n}"
+          },
+          {
+            "type": "heading",
+            "level": 2,
+            "text": "Deep Linking on Cloudflare"
+          },
+          {
+            "type": "paragraph",
+            "html": "Deep linking is enabled through a <code>_redirects</code> file that tells Cloudflare to serve <code>index.html</code> for all routes. The JavaScript router then handles the actual routing on the client side."
+          },
+          {
+            "type": "paragraph",
+            "html": "<a href=\"/\" data-link>← Back to Home</a>"
+          }
+        ]
+      },
+      "subPages": [
+        {
+          "id": "about-team",
+          "path": "/about/team",
+          "title": "Team",
+          "pageTitle": "Our Team - Simple SPA",
+          "content": {
+            "heading": "Our Team",
+            "sections": [
+              {
+                "type": "paragraph",
+                "text": "Meet the amazing people behind this project."
+              },
+              {
+                "type": "list",
+                "items": [
+                  "👨‍💻 Developer - Building great software",
+                  "🎨 Designer - Creating beautiful interfaces",
+                  "📝 Writer - Crafting compelling content"
+                ]
+              },
+              {
+                "type": "paragraph",
+                "html": "<a href=\"/about\" data-link>← Back to About</a>"
+              }
+            ]
+          }
+        },
+        {
+          "id": "about-technology",
+          "path": "/about/technology",
+          "title": "Technology",
+          "pageTitle": "Technology Stack - Simple SPA",
+          "content": {
+            "heading": "Technology Stack",
+            "sections": [
+              {
+                "type": "paragraph",
+                "text": "This application is built with modern web technologies."
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Core Technologies"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "HTML5 - Semantic markup",
+                  "CSS3 - Modern styling with Flexbox",
+                  "Vanilla JavaScript - No frameworks needed",
+                  "History API - Client-side routing",
+                  "JSON - Data-driven page structure"
+                ]
+              },
+              {
+                "type": "heading",
+                "level": 2,
+                "text": "Hosting"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "Cloudflare Pages - Fast, secure hosting",
+                  "Git-based deployment - Push to deploy",
+                  "Custom _redirects - Enable deep linking"
+                ]
+              },
+              {
+                "type": "paragraph",
+                "html": "<a href=\"/about\" data-link>← Back to About</a>"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "siteName": "Simple SPA",
+    "defaultTitle": "Simple SPA - Data-Driven Architecture",
+    "footer": "Simple 2-Page SPA with Deep Linking & Data-Driven Pages"
+  }
+}

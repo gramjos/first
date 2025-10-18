@@ -1,9 +1,0 @@
-{
-  "name": "notebook1",
-  "main": "index.js",
-  "compatibility_date": "2025-01-01",
-  "assets": {
-    "directory": "./output_dir",
-    "binding": "ASSETS"
-  }
-}
