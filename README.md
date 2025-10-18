@@ -1,12 +1,14 @@
-# Data-Driven SPA
+# Markdown-First SPA
 
-A minimal Single Page Application with **JSON-based page definitions** and deep linking support for Cloudflare Pages.
+A minimal Single Page Application with **Markdown-based page definitions** and deep linking support for Cloudflare Pages.
 
 ## ✨ Features
 
-- ✅ **Data-driven architecture** - Pages defined in pure JSON
+- ✅ **Markdown-first architecture** - Pages defined in simple Markdown files
+- ✅ **Frontmatter metadata** - YAML frontmatter for page configuration
 - ✅ **Main pages & Sub-pages** - Hierarchical page structure
-- ✅ **Zero coding required** - Add pages by editing JSON
+- ✅ **Zero coding required** - Add pages by creating Markdown files
+- ✅ **Auto-generated navigation** - Navigation links generated automatically
 - ✅ Client-side routing
 - ✅ Deep linking support (you can directly navigate to any URL)
 - ✅ Browser back/forward buttons work
@@ -16,53 +18,65 @@ A minimal Single Page Application with **JSON-based page definitions** and deep 
 
 ## 🚀 Adding New Pages
 
-**It's as simple as adding a JSON object!**
+**It's as simple as creating a Markdown file!**
 
 ### Add a Main Page
 
-Edit `pages.json` and add to the `pages` array:
+1. Create `pages/contact.md`:
+
+```markdown
+---
+id: contact
+type: main
+path: /contact
+title: Contact
+pageTitle: Contact - Simple SPA
+icon: 📧
+navOrder: 4
+---
+
+# Contact Us
+
+Get in touch with us!
+
+Send us an email at [hello@example.com](mailto:hello@example.com)
+```
+
+2. Add to `pages/manifest.json`:
 
 ```json
 {
-  "id": "contact",
-  "type": "main",
-  "path": "/contact",
-  "title": "Contact",
-  "pageTitle": "Contact - Simple SPA",
-  "icon": "📧",
-  "content": {
-    "heading": "Contact Us",
-    "sections": [
-      {
-        "type": "paragraph",
-        "text": "Get in touch with us!"
-      }
-    ]
-  }
+  "pages": [
+    "home.md",
+    "gj.md",
+    "about.md",
+    "contact.md",
+    "about/team.md",
+    "about/technology.md"
+  ]
 }
 ```
 
 ### Add a Sub-Page
 
-Add to the `subPages` array of any main page:
+1. Create `pages/about/team.md`:
 
-```json
-{
-  "id": "about-team",
-  "path": "/about/team",
-  "title": "Team",
-  "pageTitle": "Our Team - Simple SPA",
-  "content": {
-    "heading": "Our Team",
-    "sections": [
-      {
-        "type": "paragraph",
-        "text": "Meet our amazing team!"
-      }
-    ]
-  }
-}
+```markdown
+---
+id: about-team
+path: /about/team
+title: Team
+pageTitle: Our Team - Simple SPA
+---
+
+# Our Team
+
+Meet our amazing team!
+
+[← Back to About](/about)
 ```
+
+2. Add to `pages/manifest.json`
 
 **That's it!** Refresh your browser and the new page appears. No coding, no build step.
 
@@ -70,23 +84,23 @@ Add to the `subPages` array of any main page:
 
 ## How It Works
 
-### Data-Driven Architecture
+### Markdown-First Architecture
 
-1. **Define Pages** - Edit `pages.json` to add/modify pages
-2. **Load Data** - App fetches JSON on initialization
-3. **Build Routes** - Router maps all paths (main + sub-pages)
-4. **Render Content** - Renderer converts JSON sections to HTML
-5. **Navigate** - History API handles client-side routing
+1. **Create Markdown Files** - Write pages in simple Markdown with frontmatter
+2. **Parse Content** - Markdown parser extracts metadata and converts to HTML
+3. **Load Pages** - Page loader fetches all markdown files from `pages/` directory
+4. **Build Routes** - Router maps all paths (main + sub-pages)
+5. **Render Content** - Renderer displays converted HTML
+6. **Navigate** - History API handles client-side routing
 
-### Content Sections
+### Supported Markdown Features
 
-Pages support multiple section types:
-
-- **Paragraph** - Text content with optional HTML
-- **Heading** - H1-H6 headings
-- **List** - Bullet lists with HTML support
-- **Code** - Syntax-highlighted code blocks
-- **HTML** - Raw HTML for custom content
+- **Headers** - `# H1`, `## H2`, `### H3`, etc.
+- **Paragraphs** - Regular text separated by blank lines
+- **Lists** - Unordered (`-`) and ordered (`1.`) lists
+- **Links** - `[text](url)` with automatic `data-link` for internal links
+- **Text formatting** - `**bold**`, `*italic*`, `` `code` ``
+- **Code blocks** - ` ```language ` ... ` ``` `
 
 ### Client-Side Routing
 
@@ -110,24 +124,36 @@ This tells Cloudflare Pages to serve `index.html` for all routes (e.g., `/about`
 
 ```
 .
-├── index.html       # HTML structure and layout
-├── styles.css       # All CSS styling
-├── renderer.js      # Page content renderer
-├── router.js        # Router class and navigation logic
-├── app.js           # Application initialization
-├── pages.json       # 📄 PAGE DEFINITIONS (edit this to add pages!)
-├── _redirects       # Cloudflare Pages redirects config
-├── README.md        # This file
-└── ADDING_PAGES.md  # Complete guide to adding pages
+├── index.html          # HTML structure and layout
+├── styles.css          # All CSS styling
+├── markdown-parser.js  # Markdown to HTML parser
+├── page-loader.js      # Page loader from markdown files
+├── renderer.js         # Page content renderer
+├── router.js           # Router class and navigation logic
+├── app.js              # Application initialization
+├── pages/              # 📁 MARKDOWN PAGES (add .md files here!)
+│   ├── manifest.json   # List of available pages
+│   ├── home.md
+│   ├── gj.md
+│   ├── about.md
+│   └── about/
+│       ├── team.md
+│       └── technology.md
+├── pages.json          # Legacy JSON pages (fallback)
+├── _redirects          # Cloudflare Pages redirects config
+├── README.md           # This file
+└── ADDING_PAGES.md     # Complete guide to adding pages
 ```
 
 ### Architecture
 
-- **Data Layer** (`pages.json`) - All page content and structure
-- **Rendering Layer** (`renderer.js`) - Converts JSON to HTML
+- **Content Layer** (`pages/` directory) - Markdown files with frontmatter
+- **Parsing Layer** (`markdown-parser.js`) - Converts Markdown to HTML
+- **Loading Layer** (`page-loader.js`) - Discovers and loads pages
+- **Rendering Layer** (`renderer.js`) - Renders HTML content
 - **Routing Layer** (`router.js`) - Handles navigation and history
 - **Presentation Layer** (`styles.css`) - All styling
-- **Initialization** (`app.js`) - Loads data and starts app
+- **Initialization** (`app.js`) - Loads pages and starts app
 
 ## 🎯 Page Types
 
@@ -192,29 +218,47 @@ The About page should load directly without redirecting to the home page first.
 
 ### Adding a New Page
 
-Just edit `pages.json`:
+Just create a new Markdown file:
+
+**`pages/new-page.md`**
+
+```markdown
+---
+id: new-page
+type: main
+path: /new-page
+title: New Page
+pageTitle: New Page - Simple SPA
+icon: ✨
+navOrder: 5
+---
+
+# My New Page
+
+Content goes here!
+
+You can use all standard Markdown features:
+- Lists
+- **Bold** and *italic* text
+- [Links](/about)
+- `Code`
+
+## More Content
+
+Add as many sections as you need.
+```
+
+Then add it to `pages/manifest.json`:
 
 ```json
 {
   "pages": [
-    // ... existing pages ...
-    {
-      "id": "new-page",
-      "type": "main",
-      "path": "/new-page",
-      "title": "New Page",
-      "pageTitle": "New Page - Simple SPA",
-      "icon": "✨",
-      "content": {
-        "heading": "My New Page",
-        "sections": [
-          {
-            "type": "paragraph",
-            "text": "Content goes here!"
-          }
-        ]
-      }
-    }
+    "home.md",
+    "gj.md",
+    "about.md",
+    "new-page.md",
+    "about/team.md",
+    "about/technology.md"
   ]
 }
 ```
@@ -223,24 +267,23 @@ Save and refresh - done! ✨
 
 ### Adding Sub-Pages
 
-Add to the `subPages` array of any main page:
+Create a file in a subdirectory:
 
-```json
-{
-  "id": "about",
-  "type": "main",
-  "path": "/about",
-  "title": "About",
-  "subPages": [
-    {
-      "id": "about-new-subpage",
-      "path": "/about/new-subpage",
-      "title": "New Sub-Page",
-      "pageTitle": "New Sub-Page - Simple SPA",
-      "content": { ... }
-    }
-  ]
-}
+**`pages/about/new-subpage.md`**
+
+```markdown
+---
+id: about-new-subpage
+path: /about/new-subpage
+title: New Sub-Page
+pageTitle: New Sub-Page - Simple SPA
+---
+
+# New Sub-Page
+
+This is a sub-page under About.
+
+[← Back to About](/about)
 ```
 
 **See [ADDING_PAGES.md](./ADDING_PAGES.md) for complete documentation.**
