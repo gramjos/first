@@ -74,7 +74,36 @@
             "html": "<a href=\"/gj\" data-link>Learn more about this app →</a>"
           }
         ]
-      }
+      },
+            "subPages": [
+        {
+          "id": "mo-gjj",
+          "path": "/gj/more-story",
+          "title": "the gj life",
+          "pageTitle": "day in the life!",
+          "content": {
+            "heading": "Our Team",
+            "sections": [
+              {
+                "type": "paragraph",
+                "text": "meet me"
+              },
+              {
+                "type": "list",
+                "items": [
+                  "talker",
+                  "eater",
+                  "sleeper"
+                ]
+              },
+              {
+                "type": "paragraph",
+                "html": "<a href=\"/gj\" data-link>← Back to gj</a>"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "about",
