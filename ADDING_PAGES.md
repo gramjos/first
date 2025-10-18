@@ -2,29 +2,50 @@
 
 ## 🚀 How to Add a New Page
 
-Adding a new page is as simple as adding a JSON object to `pages.json`!
+Adding a new page is as simple as creating a Markdown file in the `pages/` directory!
 
 ### Main Page
 
 To add a new **main page** (appears in navigation):
 
+1. Create a new file: `pages/contact.md`
+2. Add frontmatter and content:
+
+```markdown
+---
+id: contact
+type: main
+path: /contact
+title: Contact
+pageTitle: Contact - Simple SPA
+icon: 📧
+navOrder: 4
+---
+
+# Contact Us
+
+Get in touch with us!
+
+Send us an email at [hello@example.com](mailto:hello@example.com)
+
+## Our Office
+
+123 Main Street
+City, State 12345
+```
+
+3. Add the file to `pages/manifest.json`:
+
 ```json
 {
-  "id": "contact",
-  "type": "main",
-  "path": "/contact",
-  "title": "Contact",
-  "pageTitle": "Contact - Simple SPA",
-  "icon": "📧",
-  "content": {
-    "heading": "Contact Us",
-    "sections": [
-      {
-        "type": "paragraph",
-        "text": "Get in touch with us!"
-      }
-    ]
-  }
+  "pages": [
+    "home.md",
+    "gj.md",
+    "about.md",
+    "contact.md",
+    "about/team.md",
+    "about/technology.md"
+  ]
 }
 ```
 
@@ -32,38 +53,40 @@ To add a new **main page** (appears in navigation):
 
 To add a **sub-page** (nested under a main page):
 
-Add it to the `subPages` array of a main page:
+1. Create a file in a subdirectory: `pages/about/history.md`
+2. Add frontmatter and content:
+
+```markdown
+---
+id: about-history
+path: /about/history
+title: History
+pageTitle: Our History - Simple SPA
+---
+
+# Our History
+
+Founded in 2025, we've been building great software ever since.
+
+[← Back to About](/about)
+```
+
+3. Add the file to `pages/manifest.json`:
 
 ```json
 {
-  "id": "about",
-  "type": "main",
-  "path": "/about",
-  "title": "About",
-  "pageTitle": "About - Simple SPA",
-  "icon": "ℹ️",
-  "content": { ... },
-  "subPages": [
-    {
-      "id": "about-history",
-      "path": "/about/history",
-      "title": "History",
-      "pageTitle": "Our History - Simple SPA",
-      "content": {
-        "heading": "Our History",
-        "sections": [
-          {
-            "type": "paragraph",
-            "text": "Founded in 2025..."
-          }
-        ]
-      }
-    }
+  "pages": [
+    "home.md",
+    "gj.md",
+    "about.md",
+    "about/team.md",
+    "about/technology.md",
+    "about/history.md"
   ]
 }
 ```
 
-## 📋 Required Properties
+## 📋 Frontmatter Properties
 
 ### Main Page Properties
 
@@ -75,8 +98,7 @@ Add it to the `subPages` array of a main page:
 | `title` | string | ✅ Yes | Display title in navigation |
 | `pageTitle` | string | ✅ Yes | Browser tab title |
 | `icon` | string | ❌ No | Optional emoji icon for nav |
-| `content` | object | ✅ Yes | Page content definition |
-| `subPages` | array | ❌ No | Array of sub-page objects |
+| `navOrder` | number | ❌ No | Order in navigation (lower = first) |
 
 ### Sub-Page Properties
 
@@ -86,169 +108,155 @@ Add it to the `subPages` array of a main page:
 | `path` | string | ✅ Yes | URL path (e.g., `/about/team`) |
 | `title` | string | ✅ Yes | Display title |
 | `pageTitle` | string | ✅ Yes | Browser tab title |
-| `content` | object | ✅ Yes | Page content definition |
 
-## 📝 Content Structure
+## 📝 Markdown Content
 
-The `content` object defines the page layout:
+Write your page content in standard Markdown below the frontmatter.
 
-```json
-{
-  "content": {
-    "heading": "Page Heading",
-    "sections": [
-      // Array of section objects
-    ]
-  }
-}
+### Supported Markdown Features
+
+#### Headers
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
 ```
 
-## 🧩 Section Types
+#### Paragraphs
 
-### 1. Paragraph
+Just write text on separate lines. Blank lines separate paragraphs.
 
-```json
-{
-  "type": "paragraph",
-  "text": "Plain text paragraph"
-}
+#### Lists
+
+Unordered lists:
+```markdown
+- First item
+- Second item
+- Third item
 ```
 
-Or with HTML:
-
-```json
-{
-  "type": "paragraph",
-  "html": "Paragraph with <strong>HTML</strong> content"
-}
+Ordered lists:
+```markdown
+1. First item
+2. Second item
+3. Third item
 ```
 
-### 2. Heading
+#### Links
 
-```json
-{
-  "type": "heading",
-  "level": 2,
-  "text": "Section Heading"
-}
+```markdown
+[Link text](https://example.com)
+[Internal link](/about)
 ```
 
-Levels: 1-6 (default: 2)
+Internal links (starting with `/`) automatically get the `data-link` attribute for client-side routing.
 
-### 3. List
+#### Text Formatting
 
-```json
-{
-  "type": "list",
-  "items": [
-    "First item",
-    "Second item with <strong>HTML</strong>",
-    "Third item"
-  ]
-}
+```markdown
+**Bold text**
+*Italic text*
+`Inline code`
 ```
 
-### 4. Code Block
+#### Code Blocks
 
-```json
-{
-  "type": "code",
-  "language": "javascript",
-  "code": "const hello = 'world';\nconsole.log(hello);"
-}
+````markdown
+```javascript
+const hello = 'world';
+console.log(hello);
 ```
-
-### 5. Raw HTML
-
-```json
-{
-  "type": "html",
-  "html": "<div class='custom'>Any HTML here</div>"
-}
-```
+````
 
 ## 🎯 Complete Example
 
 Here's a complete example adding a "Services" page with two sub-pages:
 
+### Main Page: `pages/services.md`
+
+```markdown
+---
+id: services
+type: main
+path: /services
+title: Services
+pageTitle: Our Services - Simple SPA
+icon: 🛠️
+navOrder: 4
+---
+
+# Our Services
+
+We offer a wide range of professional services.
+
+## What We Do
+
+- Web Development
+- Mobile Apps
+- Consulting
+
+Check out our specialized services:
+- [Web Development](/services/web)
+- [Mobile Apps](/services/mobile)
+```
+
+### Sub-Page 1: `pages/services/web.md`
+
+```markdown
+---
+id: services-web
+path: /services/web
+title: Web Development
+pageTitle: Web Development - Simple SPA
+---
+
+# Web Development
+
+We build modern, responsive websites.
+
+[← Back to Services](/services)
+```
+
+### Sub-Page 2: `pages/services/mobile.md`
+
+```markdown
+---
+id: services-mobile
+path: /services/mobile
+title: Mobile Apps
+pageTitle: Mobile Apps - Simple SPA
+---
+
+# Mobile App Development
+
+Native and cross-platform mobile applications.
+
+[← Back to Services](/services)
+```
+
+### Update manifest: `pages/manifest.json`
+
 ```json
 {
-  "id": "services",
-  "type": "main",
-  "path": "/services",
-  "title": "Services",
-  "pageTitle": "Our Services - Simple SPA",
-  "icon": "🛠️",
-  "content": {
-    "heading": "Our Services",
-    "sections": [
-      {
-        "type": "paragraph",
-        "text": "We offer a wide range of professional services."
-      },
-      {
-        "type": "heading",
-        "level": 2,
-        "text": "What We Do"
-      },
-      {
-        "type": "list",
-        "items": [
-          "Web Development",
-          "Mobile Apps",
-          "Consulting"
-        ]
-      }
-    ]
-  },
-  "subPages": [
-    {
-      "id": "services-web",
-      "path": "/services/web",
-      "title": "Web Development",
-      "pageTitle": "Web Development - Simple SPA",
-      "content": {
-        "heading": "Web Development",
-        "sections": [
-          {
-            "type": "paragraph",
-            "text": "We build modern, responsive websites."
-          },
-          {
-            "type": "paragraph",
-            "html": "<a href=\"/services\" data-link>← Back to Services</a>"
-          }
-        ]
-      }
-    },
-    {
-      "id": "services-mobile",
-      "path": "/services/mobile",
-      "title": "Mobile Apps",
-      "pageTitle": "Mobile Apps - Simple SPA",
-      "content": {
-        "heading": "Mobile App Development",
-        "sections": [
-          {
-            "type": "paragraph",
-            "text": "Native and cross-platform mobile applications."
-          },
-          {
-            "type": "paragraph",
-            "html": "<a href=\"/services\" data-link>← Back to Services</a>"
-          }
-        ]
-      }
-    }
+  "pages": [
+    "home.md",
+    "gj.md",
+    "about.md",
+    "services.md",
+    "about/team.md",
+    "about/technology.md",
+    "services/web.md",
+    "services/mobile.md"
   ]
 }
 ```
 
 ## 🔄 After Adding Pages
 
-1. Open `pages.json`
-2. Add your page object to the `pages` array
-3. Save the file
+1. Create your markdown file in the `pages/` directory
+2. Add it to `pages/manifest.json`
+3. Save both files
 4. Refresh your browser - that's it! ✨
 
 The navigation will automatically update, and your new page will be live.
@@ -257,17 +265,19 @@ The navigation will automatically update, and your new page will be live.
 
 - **Icons**: Use emojis for visual appeal (🏠 📧 ℹ️ 🛠️)
 - **Paths**: Use `/parent/child` format for sub-pages
-- **Links**: Use `data-link` attribute for internal links
-- **HTML**: You can use HTML in most text fields for rich formatting
+- **Links**: Internal links (starting with `/`) automatically work with client-side routing
+- **navOrder**: Control navigation order with the `navOrder` property (lower numbers appear first)
 - **Sub-pages**: Automatically shown as "Related Pages" on parent page
+- **Markdown**: Standard markdown features are supported (headers, lists, links, bold, italic, code)
 
 ## 🎨 Navigation Behavior
 
-- **Main pages** appear in the top navigation bar
+- **Main pages** (with `type: main`) appear in the top navigation bar
 - **Sub-pages** are accessible via direct URL or links
-- **Parent pages** show automatic "Related Pages" section
+- **Parent pages** automatically show "Related Pages" section with sub-pages
 - **Active states** highlight current page in navigation
+- **navOrder** determines the order pages appear in navigation
 
 ## 📦 No Build Required
 
-That's the beauty of this architecture - just edit JSON and reload! No compilation, no build step, no complex tools.
+That's the beauty of this architecture - just write Markdown and reload! No compilation, no build step, no complex tools.
